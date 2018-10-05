@@ -1,16 +1,34 @@
 package main
 
 import (
-	"io/ioutil"
+	"fmt"
 	"net/http"
+
+	"golang.org/x/net/html"
 )
 
 func main() {
-	resp, err := http.Get("https://habr.com")
+	response, err := http.Get("https://habr.com")
 	if err != nil {
 		panic("sasee")
 	}
-	defer resp.Body.Close()
-	body, err := ioutil.ReadAll(resp.Body)
-	println(string(body))
+	z := html.NewTokenizer(response.Body)
+
+	for {
+		tt := z.Next()
+
+		switch {
+		case tt == html.ErrorToken:
+			// End of the document, we're done
+			return
+		case tt == html.StartTagToken:
+			t := z.Token()
+
+			isAnchor := t.Data == "li"
+			if isAnchor {
+				fmt.Println("We found a link!")
+				fmt.Println("It has attribute" + t.Attr[0].Val)
+			}
+		}
+	}
 }
