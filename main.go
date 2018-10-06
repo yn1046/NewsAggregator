@@ -9,8 +9,14 @@ import (
 	"github.com/labstack/echo/middleware"
 )
 
+// NewsPost — a model representing post
+type NewsPost struct {
+	Title string `json:"title"`
+	Text  string `json:"text"`
+}
+
 // FetchParseHabr is a method that retrieves and parses posts from habr.com
-func FetchParseHabr() {
+func FetchParseHabr() []NewsPost {
 	res, err := http.Get("https://habr.com")
 	if err != nil {
 		panic("Couldn't reach habr.com.")
@@ -22,13 +28,15 @@ func FetchParseHabr() {
 		log.Fatal("Couldn't create document from response.")
 	}
 
+	var posts []NewsPost
+
 	doc.Find(".post_preview").Each(func(i int, s *goquery.Selection) {
 		title := s.Find(".post__title_link").Text()
 		text := s.Find(".post__text.post__text-html").Text()
-		println(title)
-		println(text + "\n\n\n")
-
+		posts = append(posts, NewsPost{Title: title, Text: text})
 	})
+
+	return posts
 }
 
 func main() {
@@ -38,6 +46,10 @@ func main() {
 	// Middleware
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
+
+	e.GET("/api/posts", func(c echo.Context) error {
+		return c.JSON(http.StatusOK, FetchParseHabr())
+	})
 
 	e.File("/", "client/index.html")
 	e.Static("/dist", "client/dist")
