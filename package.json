@@ -1,0 +1,31 @@
+{
+  "name": "newsparser",
+  "version": "1.0.0",
+  "private": true,
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": {
+    "name": "Vasiliy",
+    "url": "https://github.com/yn1046"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "vue": "^2.5.17",
+    "vue-class-component": "^6.2.0",
+    "vue-property-decorator": "^7.2.0",
+    "vue-router": "^3.0.1"
+  },
+  "devDependencies": {
+    "css-loader": "^1.0.0",
+    "ts-loader": "^5.2.1",
+    "typescript": "^3.1.1",
+    "vue-loader": "^15.4.2",
+    "vue-template-compiler": "^2.5.17",
+    "webpack": "^4.20.2"
+  }
+}
