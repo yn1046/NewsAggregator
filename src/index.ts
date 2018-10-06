@@ -1,13 +1,13 @@
 import Vue from "vue";
+import PostComponent from './component/Post.vue'
 
 let v = new Vue({
     el: "#app",
     template: `
     <div>
-        <div>Hello {{name}}!</div>
-        Name: <input v-model="name" type="text">
+        <PostComponent />
     </div>`,
-    data: {
-        name: "World"
+    components: {
+        PostComponent
     }
 });
