@@ -1,34 +1,30 @@
 package main
 
 import (
-	"fmt"
+	"log"
 	"net/http"
 
-	"golang.org/x/net/html"
+	"github.com/PuerkitoBio/goquery"
 )
 
 func main() {
-	response, err := http.Get("https://habr.com")
+	res, err := http.Get("https://habr.com")
 	if err != nil {
 		panic("sasee")
 	}
-	z := html.NewTokenizer(response.Body)
+	defer res.Body.Close()
 
-	for {
-		tt := z.Next()
-
-		switch {
-		case tt == html.ErrorToken:
-			// End of the document, we're done
-			return
-		case tt == html.StartTagToken:
-			t := z.Token()
-
-			isAnchor := t.Data == "li"
-			if isAnchor {
-				fmt.Println("We found a link!")
-				fmt.Println("It has attribute" + t.Attr[0].Val)
-			}
-		}
+	doc, err := goquery.NewDocumentFromReader(res.Body)
+	if err != nil {
+		log.Fatal("SHYTE SUXX")
 	}
+
+	doc.Find(".post_preview").Each(func(i int, s *goquery.Selection) {
+		title := s.Find(".post__title_link").Text()
+		text := s.Find(".post__text.post__text-html").Text()
+		println(title)
+		println(text)
+		println("post found!")
+
+	})
 }
