@@ -40,5 +40,6 @@ func main() {
 	e.Use(middleware.Recover())
 
 	e.File("/", "client/index.html")
-
+	e.Static("/dist", "client/dist")
+	e.Start(":1323")
 }
