@@ -51,7 +51,7 @@ func main() {
 		return c.JSON(http.StatusOK, FetchParseHabr())
 	})
 
-	e.File("/", "client/index.html")
-	e.Static("/dist", "client/dist")
+	e.File("/", "dist/index.html")
+	e.Static("/", "dist")
 	e.Start(":1323")
 }
